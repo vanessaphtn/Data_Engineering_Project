@@ -1,1 +1,84 @@
-# Data_Engineering_Project
+# Examining the Influence of Weather on CitiBike Trips in New York City
+
+## 1. Business Brief
+### Objective
+The project investigates how daily weather conditions influence the use of a selected Citi Bike station in New York City over the course of 2024. Each new month of data is incorporated sequentially, allowing for a continuous view of usage patterns across the year. The station was chosen from a popular area to capture steady demand and provide meaningful comparisons between members and casual riders.
+### Stakeholders
+The results are relevant for city planners and policymakers seeking to understand how weather shapes urban mobility and how cycling infrastructure can better support sustainable transport. Bike-sharing operators gain practical insight into how demand fluctuates under different conditions, which can guide resource allocation, fleet management, and service improvements. Researchers in transportation and environmental studies can use the findings to analyze how climate factors interact with everyday mobility choices in a dense urban setting.
+### Key Metrics (KPIs)
+- Daily ride count (members vs casuals) 
+- Average trip duration 
+- Average trip distance 
+
+### Business Questions
+1. How do daily temperatures influence the number of rides taken from the station?
+2. How do precipitation and snowfall affect daily ride counts?
+3. Do members or casual riders contribute more to overall ride volume under different weather conditions?
+4. Do members or casual riders take longer trips in terms of duration?
+5. Do members or casual riders travel farther in terms of distance?
+6. How does weather influence the average trip duration from the station?
+7. How does weather influence the average trip distance from the station?
+8. Are there consistent differences in usage between weekdays and weekends?
+9. How do national holidays compare with regular weekdays in terms of ride count and rider type?
+10. How do seasonal changes across the year (winter vs summer months) affect ride frequency, trip duration, and distance?
+
+## 2. Datasets
+### [New York City CitiBike Rides Data](https://s3.amazonaws.com/tripdata/index.html)
+The CitiBike dataset contains detailed trip-level information about New York City’s public bike-sharing system. Each record represents a single ride and includes fields such as trip start and end times, start and end station names and IDs, station geocoordinates (latitude and longitude), bike ID, bike and membership type. Data is provided as monthly CSV files through CitiBike’s official portal, and each file typically contains hundreds of thousands of rows. Therefore we have decided to take a look at a single station to make the dataset more manageable.  
+### [Weather API](https://open-meteo.com/en/docs/historical-weather-api)
+The Open-Meteo Historical Weather API provides structured weather data at a daily frequency. It includes variables such as daily minimum and maximum temperature, precipitation, humidity, wind speed etc. The API allows data retrieval for specific locations, enabling us to extract weather observations for New York City. 
+
+## 3. Tooling
+In our project, **Docker** provides a reproducible environment for running ingestion scripts, while **Airflow** schedules and automates monthly CitiBike file loads and daily weather API pulls. The raw and processed data is stored in **Postgres**, which also serves as the central data warehouse. **dbt** is used to transform the data and build a star schema and prepare daily aggregates such as ride counts and member ratios. Analytical queries at scale could be handled with **ClickHouse** as an OLAP engine, and **MongoDB** would be suitable for handling semi-structured weather feeds. Governance and security could be addressed through **Open Metadata** and **masking or RBAC** techniques. Results could also be presented as an interactive dashboard using the **Streamlit** application. 
+
+## 4. Data Architecture
+<img width="1045" height="273" alt="DataArchitecture" src="https://github.com/user-attachments/assets/f3f3a48b-079f-47cc-882d-bfffcc6d2d9a" />
+
+**Quality checks** (done after ingestion): Ensure that every bike trip has both a valid start station and end station, including non-null latitude and longitude values. Trips missing these fields would be excluded. Also, checking if the latitude and longitude values are realistic and falling within the expected geographic range of New York City.
+
+## 5. Data Model 
+<img width="1045" height="auto" alt="DataModel" src="https://github.com/user-attachments/assets/8c276a54-61ab-4695-9b4a-82a1be82dded" />
+
+## 6. Data Dictionary
+### FACT_BIKE_RIDE_station_name
+| Column           | Data type       | PK / FK                   | Description                                      |
+|-----------------|----------------|---------------------------|-------------------------------------------------|
+| Bike_type       | VARCHAR(20)     |                           | Type of bike used for the ride (classic_bike or electric_bike) |
+| Start_date      | INT             | FK (DIM_TIME, Time_ID)    | Ride start time                                  |
+| End_date        | INT             | FK (DIM_TIME, Time_ID)    | Ride end time                                    |
+| Weather         | INT             | FK (DIM_WEATHER, Weather_ID) | Weather on the day of the ride                |
+| Start_timestamp | TIMESTAMP       |                           | Exact timestamp of the ride start time          |
+| End_timestamp   | TIMESTAMP       |                           | Exact timestamp of the ride end time            |
+| Start_station_ID| VARCHAR(10)     | FK (DIM_STATIONS, Station_ID) | Station from where the ride started        |
+| End_station_ID  | VARCHAR(10)     | FK (DIM_STATIONS, Station_ID) | Station where the ride ended                 |
+| User_type       | VARCHAR(10)     |                           | Type of the user (member or casual)            |
+
+### DIM_STATIONS
+| Column        | Data type            | PK / FK | Description                                    |
+|---------------|--------------------|---------|-----------------------------------------------|
+| Station_ID    | VARCHAR(10)         | PK      | ID of the station, e.g. ‘HB202’              |
+| Station_name  | VARCHAR             |         | Name of the station, e.g. ‘Clinton St & Newark St’ |
+| Latitude      | DECIMAL(8,6)        |         | Latitude of the station position              |
+| Longitude     | DECIMAL(9,6)        |         | Longitude of the station position             |
+
+### DIM_WEATHER
+| Column                 | Data type     | PK / FK | Description                                                |
+|------------------------|--------------|---------|------------------------------------------------------------|
+| Weather_ID             | INT          | PK      | Primary key for weather                                     |
+| Temperature_max        | DECIMAL(4,2) |         | Maximum daily air temperature at 2 meters above ground (°C)|
+| Temperature_min        | DECIMAL(4,2) |         | Minimum daily air temperature at 2 meters above ground (°C)|
+| Rain_sum               | FLOAT        |         | Sum of daily rain (mm)                                     |
+| Precipitation_hours    | INT          |         | The number of hours with rain                               |
+| Snowfall_sum           | FLOAT        |         | Sum of daily snowfall (cm)                                  |
+| Wind_speed_max         | FLOAT        |         | Maximum wind speed (km/h)                                   |
+| Shortwave_radiation_sum| FLOAT        |         | Sum of solar radiation on a given day in Megajoules (MJ/m²)|
+
+### DIM_TIME
+| Column             | Data type | PK / FK | Description                                               |
+|-------------------|----------|---------|-----------------------------------------------------------|
+| Time_ID           | INT      | PK      | Primary key for the time                                  |
+| Day               | INT      |         | Day of the month (1–31)                                   |
+| Month             | INT      |         | Month of the year (1–12)                                   |
+| Weekday           | INT      |         | Day of the week (1–7). 1 meaning Monday, 7 Sunday        |
+| Is_national_holiday| BOOLEAN  |         | Whether the day is a federal holiday                      |
+
