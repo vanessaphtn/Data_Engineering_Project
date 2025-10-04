@@ -35,7 +35,6 @@ CREATE TABLE FACT_BIKE_RIDE (
     Weather INT REFERENCES DIM_WEATHER(Weather_ID), 
     Start_timestamp TIMESTAMP,                   
     End_timestamp TIMESTAMP,                     
-    Start_station_ID VARCHAR(10) REFERENCES DIM_STATIONS(Station_ID), 
     End_station_ID VARCHAR(10) REFERENCES DIM_STATIONS(Station_ID),   
     User_type VARCHAR(10)                         
 );

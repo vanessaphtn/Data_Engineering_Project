@@ -6,7 +6,7 @@ The project investigates how daily weather conditions influence the use of a sel
 ### Stakeholders
 The results are relevant for city planners and policymakers seeking to understand how weather shapes urban mobility and how cycling infrastructure can better support sustainable transport. Bike-sharing operators gain practical insight into how demand fluctuates under different conditions, which can guide resource allocation, fleet management, and service improvements. Researchers in transportation and environmental studies can use the findings to analyze how climate factors interact with everyday mobility choices in a dense urban setting.
 ### Key Metrics (KPIs)
-- Daily ride count (members vs casuals) 
+- Daily ride count (members vs non-members) 
 - Average trip duration 
 - Average trip distance 
 
@@ -40,7 +40,7 @@ In our project, **Docker** provides a reproducible environment for running inges
 <img width="1045" height="auto" alt="DataModel" src="https://github.com/user-attachments/assets/8c276a54-61ab-4695-9b4a-82a1be82dded" />
 
 ## 6. Data Dictionary
-### FACT_BIKE_RIDE_station_name
+### FACT_BIKE_RIDE
 | Column           | Data type       | PK / FK                   | Description                                      |
 |-----------------|----------------|---------------------------|-------------------------------------------------|
 | Bike_type       | VARCHAR(20)     |                           | Type of bike used for the ride (classic_bike or electric_bike) |
@@ -49,7 +49,6 @@ In our project, **Docker** provides a reproducible environment for running inges
 | Weather         | INT             | FK (DIM_WEATHER, Weather_ID) | Weather on the day of the ride                |
 | Start_timestamp | TIMESTAMP       |                           | Exact timestamp of the ride start time          |
 | End_timestamp   | TIMESTAMP       |                           | Exact timestamp of the ride end time            |
-| Start_station_ID| VARCHAR(10)     | FK (DIM_STATIONS, Station_ID) | Station from where the ride started        |
 | End_station_ID  | VARCHAR(10)     | FK (DIM_STATIONS, Station_ID) | Station where the ride ended                 |
 | User_type       | VARCHAR(10)     |                           | Type of the user (member or casual)            |
 
