@@ -2,7 +2,7 @@
 
 ## 1. Business Brief
 ### Objective
-The project investigates how daily weather conditions influence the use of a selected Citi Bike station in New York City over the course of 2024. Each new month of data is incorporated sequentially, allowing for a continuous view of usage patterns across the year. The station was chosen from a popular area to capture steady demand and provide meaningful comparisons between members and casual riders.
+The project investigates how daily weather conditions influence the use of a selected Citi Bike station in New York City over the course of 2024. Each new month of data is incorporated sequentially, allowing for a continuous view of usage patterns across the year. The station was chosen from a popular area to capture steady demand and provide meaningful comparisons between members and casual riders. The observed station is 5 Ave & W 31 St and it is located in a busy area near Penn Station, Madison Square Garden, and several office buildings. Although the analysis focuses on New York City, the same framework can be applied to other cities or countries, such as Tartu, to explore how weather conditions impact shared bike usage in different urban areas.
 ### Stakeholders
 The results are relevant for city planners and policymakers seeking to understand how weather shapes urban mobility and how cycling infrastructure can better support sustainable transport. Bike-sharing operators gain practical insight into how demand fluctuates under different conditions, which can guide resource allocation, fleet management, and service improvements. Researchers in transportation and environmental studies can use the findings to analyze how climate factors interact with everyday mobility choices in a dense urban setting.
 ### Key Metrics (KPIs)
@@ -36,8 +36,16 @@ In our project, **Docker** provides a reproducible environment for running inges
 
 **Quality checks** (done after ingestion): Ensure that every bike trip has both a valid start station and end station, including non-null latitude and longitude values. Trips missing these fields would be excluded. Also, checking if the latitude and longitude values are realistic and falling within the expected geographic range of New York City.
 
-## 5. Data Model 
-<img width="1045" height="auto" alt="DataModel" src="https://github.com/user-attachments/assets/8c276a54-61ab-4695-9b4a-82a1be82dded" />
+## 5. Data Model
+<img width="1045" height="auto" alt="dataModel2" src="https://github.com/user-attachments/assets/c21f0ec3-1c67-4563-a265-79abf40c20e4" /> 
+
+**Grain**: Each record represents a single ride event that started and ended on a specific date, linking to corresponding time, weather, and station information.
+
+**Slowly Changing Dimension (SCD)**: DIM_STATIONS uses SCD Type 2 to preserve historical changes in station information, while DIM_WEATHER and DIM_TIME are Static, as weather and time data are fixed historical records that do not change over time.
+
+**Possible improvements**: Currently, the fact table represents rides originating from a single station and ending at any number of other stations. To enable monitoring of trips between all possible station pairs, the fact table could be updated by adding a new column, ‘Start_station_ID’. This addition would allow analysis of rides from every start station to every end station, allowing for a deeper examination of station popularity and user patterns.
+
+
 
 ## 6. Data Dictionary
 ### FACT_BIKE_RIDE
