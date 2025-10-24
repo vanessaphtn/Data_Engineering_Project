@@ -1,0 +1,6 @@
+clickhouse_driver
+pandas
+requests
+requests_cache
+openmeteo_requests
+retry_requests

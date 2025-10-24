@@ -1,0 +1,10 @@
+
+# Ignore local Airflow and data folders
+data/
+logs/
+.airflow/
+__pycache__/
+*.pyc
+.cache/
+.env
+
