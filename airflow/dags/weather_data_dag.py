@@ -12,7 +12,7 @@ import requests_cache
 from retry_requests import retry
 
 # --------------------------------------------------------------------------------
-# Helper functions
+# Downloads the weather data via API
 # --------------------------------------------------------------------------------
 
 def download_weather_data(
@@ -100,9 +100,9 @@ with DAG(
     dag_id="weather_data_ingestion",
     default_args=default_args,
     description="Download daily weather data and save to CSV",
-    start_date=datetime(2024, 1, 1),
+    start_date=datetime(2025, 10, 20),
     schedule_interval="@daily",  # change as needed
-    catchup=True,
+    catchup=False,
     tags=["weather", "bronze"],
 ) as dag:
 
@@ -110,29 +110,13 @@ with DAG(
     # Task: Download and save weather data
     # --------------------------------------------------------------------------------
     def download_and_save(**kwargs):
-        execution_date = kwargs["ds"]  # e.g. '2025-10-24'
-        df = download_weather_data(start_date=execution_date, end_date=execution_date)
+            execution_date = kwargs["ds"]
+            file_path = "/opt/airflow/data/bronze/weather_data.csv"
+            os.makedirs("/opt/airflow/data/bronze", exist_ok=True)
 
-        os.makedirs("/opt/airflow/data/bronze", exist_ok=True)
-        file_path = "/opt/airflow/data/bronze/weather_data.csv"
-
-        # If the file exists, append only if that date is not already present
-        if os.path.exists(file_path):
-            existing_df = pd.read_csv(file_path)
-
-            # Remove any old rows for this same date (idempotency)
-            existing_df = existing_df[existing_df["date"] != execution_date]
-
-            # Append and sort
-            combined_df = pd.concat([existing_df, df], ignore_index=True)
-            combined_df = combined_df.sort_values("date")
-
-            combined_df.to_csv(file_path, index=False)
-            print(f"Appended data for {execution_date} to {file_path}")
-        else:
-            # If file doesn’t exist yet, just write the first day
+            df = download_weather_data(start_date="2024-01-01", end_date=execution_date)
             df.to_csv(file_path, index=False)
-            print(f"Created new cumulative file: {file_path}")
+
 
     download_task = PythonOperator(
         task_id="download_weather_data",
@@ -143,40 +127,40 @@ with DAG(
     # --------------------------------------------------------------------------------
     #  Load into ClickHouse -- POLE TEHTUD, hetkel mingi chatGPT värk 
     # --------------------------------------------------------------------------------
-    def load_to_clickhouse(**kwargs):
-        file_path = "data/bronze/weather_data.csv"
-        df = pd.read_csv(file_path)
+    # def load_to_clickhouse(**kwargs):
+    #     file_path = "data/bronze/weather_data.csv"
+    #     df = pd.read_csv(file_path)
 
-        # ClickHouse connection (example using BaseHook for Airflow connection)
-        client = Client(host="clickhouse", port=9000, user="default", password="clickhouse", database="weather_db")
-        client.execute("CREATE TABLE IF NOT EXISTS bronze_weather (\
-            date DateTime, \
-            weather_code Float32, \
-            temperature_2m_mean Float32, \
-            temperature_2m_max Float32, \
-            temperature_2m_min Float32, \
-            rain_sum Float32, \
-            snowfall_sum Float32, \
-            precipitation_hours Float32, \
-            wind_speed_10m_max Float32, \
-            shortwave_radiation_sum Float32)\
-            ENGINE = MergeTree() ORDER BY date;")
+    #     # ClickHouse connection (example using BaseHook for Airflow connection)
+    #     client = Client(host="clickhouse", port=9000, user="default", password="clickhouse", database="weather_db")
+    #     client.execute("CREATE TABLE IF NOT EXISTS bronze_weather (\
+    #         date DateTime, \
+    #         weather_code Float32, \
+    #         temperature_2m_mean Float32, \
+    #         temperature_2m_max Float32, \
+    #         temperature_2m_min Float32, \
+    #         rain_sum Float32, \
+    #         snowfall_sum Float32, \
+    #         precipitation_hours Float32, \
+    #         wind_speed_10m_max Float32, \
+    #         shortwave_radiation_sum Float32)\
+    #         ENGINE = MergeTree() ORDER BY date;")
 
-        # Insert data
-        records = df.to_dict("records")
-        client.execute(
-            "INSERT INTO bronze_weather VALUES",
-            [tuple(r.values()) for r in records]
-        )
-        print(f"Loaded {len(df)} rows into ClickHouse.")
+    #     # Insert data
+    #     records = df.to_dict("records")
+    #     client.execute(
+    #         "INSERT INTO bronze_weather VALUES",
+    #         [tuple(r.values()) for r in records]
+    #     )
+    #     print(f"Loaded {len(df)} rows into ClickHouse.")
 
-    load_task = PythonOperator(
-        task_id="load_weather_to_clickhouse",
-        python_callable=load_to_clickhouse
-    )
+    # load_task = PythonOperator(
+    #     task_id="load_weather_to_clickhouse",
+    #     python_callable=load_to_clickhouse
+    # )
 
-    # --------------------------------------------------------------------------------
-    # Task dependencies
-    # --------------------------------------------------------------------------------
-    download_task >> load_task
+    # # --------------------------------------------------------------------------------
+    # # Task dependencies
+    # # --------------------------------------------------------------------------------
+    # download_task >> load_task
 
