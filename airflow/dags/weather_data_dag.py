@@ -100,7 +100,7 @@ with DAG(
     dag_id="weather_data_ingestion",
     default_args=default_args,
     description="Download daily weather data and save to CSV",
-    start_date=datetime(2025, 10, 20),
+    start_date=datetime(2025, 10, 24),
     schedule_interval="@daily",  # change as needed
     catchup=False,
     tags=["weather", "bronze"],
@@ -114,7 +114,7 @@ with DAG(
             file_path = "/opt/airflow/data/bronze/weather_data.csv"
             os.makedirs("/opt/airflow/data/bronze", exist_ok=True)
 
-            df = download_weather_data(start_date="2024-01-01", end_date=execution_date)
+            df = download_weather_data(start_date="2024-01-01", end_date=execution_date) # currently rewriting the weather data every time
             df.to_csv(file_path, index=False)
 
 

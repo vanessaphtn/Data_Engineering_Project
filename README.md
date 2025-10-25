@@ -89,3 +89,13 @@ In our project, **Docker** provides a reproducible environment for running inges
 | Weekday           | INT      |         | Day of the week (1–7). 1 meaning Monday, 7 Sunday        |
 | Is_national_holiday| BOOLEAN  |         | Whether the day is a federal holiday                      |
 
+
+## Project start:
+```
+git clone https://github.com/vanessaphtn/Data_Engineering_Project.git
+cd data-engineering-project
+docker compose build
+docker compose up -d
+```
+
+Airflow is http://localhost:8080 
