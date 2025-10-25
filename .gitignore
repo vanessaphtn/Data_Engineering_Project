@@ -7,4 +7,5 @@ __pycache__/
 *.pyc
 .cache/
 .env
-
+airflow/dags/data_test
+airflow/dags/test.py
