@@ -90,7 +90,7 @@ default_args = {
     "email_on_failure": False,
     "email_on_retry": False,
     "retries": 1,
-    "retry_delay": timedelta(minutes=5),
+    "retry_delay": timedelta(minutes=2),
 }
 
 # --------------------------------------------------------------------------------
@@ -111,7 +111,7 @@ with DAG(
     # --------------------------------------------------------------------------------
     def download_and_save(**kwargs):
             execution_date = kwargs["ds"]
-            file_path = "/opt/airflow/data/bronze/weather_data.csv"
+            file_path = "/opt/airflow/data/bronze/weather/weather_data.csv"
             os.makedirs("/opt/airflow/data/bronze", exist_ok=True)
 
             df = download_weather_data(start_date="2024-01-01", end_date=execution_date) # currently rewriting the weather data every time

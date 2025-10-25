@@ -70,7 +70,7 @@ default_args = {
     "email_on_failure": False,
     "email_on_retry": False,
     "retries": 1,
-    "retry_delay": timedelta(minutes=5),
+    "retry_delay": timedelta(minutes=2),
 }
 
 # --------------------------------------------------------------------------------
@@ -96,33 +96,14 @@ with DAG(
 
         df_new = download_citibike_month(month_str=last_month) # new data
 
-        bronze_dir = "/opt/airflow/data/bronze"
+        bronze_dir = "/opt/airflow/data/bronze/citibike/"
         os.makedirs(bronze_dir, exist_ok=True)
 
-        # all historic citibike_YYYY.csv
-        historic_files = [
-            os.path.join(bronze_dir, f)
-            for f in os.listdir(bronze_dir)
-            if f.startswith("citibike_20") and f.endswith(".csv") and last_month not in f
-        ]
+        # Save this month’s data
+        path = os.path.join(bronze_dir, f"citibike_{last_month}.csv")
+        df_new.to_csv(path, index=False)
+        print(f"Saved {len(df_new)} new rides to {path}")
 
-        df_historic_list = []
-        for file in historic_files:
-            df_historic_list.append(pd.read_csv(file))
-
-        df_historic = pd.concat(df_historic_list, ignore_index=True) if df_historic_list else pd.DataFrame()
-
-        # Filter out duplicates
-        if not df_historic.empty and "ride_id" in df_new.columns and "ride_id" in df_historic.columns:
-            before = len(df_new)
-            df_new = df_new[~df_new["ride_id"].isin(df_historic["ride_id"])]
-            print(f"Removed {before - len(df_new)} rides already present in historic datasets.")
-
-        # Save or overwrite this month’s file
-        if len(df_new) > 0:
-            monthly_path = os.path.join(bronze_dir, f"citibike_{last_month}.csv")
-            df_new.to_csv(monthly_path, index=False)
-            print(f"Saved {len(df_new)} new rides to {monthly_path}")
 
     download_task = PythonOperator(
         task_id="download_bike_data",
