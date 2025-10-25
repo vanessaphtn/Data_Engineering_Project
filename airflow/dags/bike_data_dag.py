@@ -31,20 +31,18 @@ def download_citibike_month(month_str, station_name="8 Ave & W 31 St", output_di
         raise ValueError(f"No CSV files found in {url}")
 
     dfs = []
-    for csv_name in csv_files:
-        print(f"Reading {csv_name} ...")
-        df = pd.read_csv(z.open(csv_name))
-        dfs.append(df)
+    for csv_file in csv_files:
+        print(f"Processing {csv_file} ...")
+        df_chunk = pd.read_csv(z.open(csv_file))
+        # Filter for a specific station
+        if station_name and "start_station_name" in df_chunk.columns:
+            df_chunk = df_chunk[df_chunk["start_station_name"] == station_name]
+        dfs.append(df_chunk)
 
     # Combine all CSVs into one DataFrame
     df_all = pd.concat(dfs, ignore_index=True)
 
     # ----- QUALITY CHECKS -----
-
-    # Filter for a specific station
-    if station_name is not None and "start_station_name" in df_all.columns:
-        df_all = df_all[df_all["start_station_name"] == station_name]
-
     # Drop NaNs in station names and coordinates 
     df_all = df_all.dropna(subset=["start_station_name", "end_station_name","start_lat", "start_lng", "end_lat", "end_lng"])
 
