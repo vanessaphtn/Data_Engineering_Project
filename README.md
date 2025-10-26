@@ -91,14 +91,31 @@ In our project, **Docker** provides a reproducible environment for running inges
 
 
 ## Project start:
+
 ```
+
 git clone https://github.com/vanessaphtn/Data_Engineering_Project.git
 cd data-engineering-project
 docker compose build
 docker compose up -d
+
+CMD - käsud(Build Silver/Gold with dbt):
+docker compose run --rm dbt debug
+docker compose run --rm dbt run
+docker compose run --rm dbt test
+
+Query:
+curl -u default:clickhouse "http://localhost:8123/?query=SHOW%20TABLES%20FROM%20default_silver"
+curl -u default:clickhouse "http://localhost:8123/?query=SHOW%20TABLES%20FROM%20default_gold"
+curl -u default:clickhouse "http://localhost:8123/?query=SELECT%20count()%20FROM%20default_gold.fact_bike_ride"
+
+
 ```
 
-Airflow is http://localhost:8080 
+Airflow is http://localhost:8080 (admin/admin)
 
 See võiks midagi sellist välja näha:
+<img width="1440" height="876" alt="Screenshot 2025-10-25 at 14 00 39" src="https://github.com/user-attachments/assets/00d41efd-3752-4cec-a6f3-765d69bc9d9a" />
+
+Nüüd võiks midagi sellist välja näha (eeldatavasti):
 <img width="1440" height="876" alt="Screenshot 2025-10-25 at 14 00 39" src="https://github.com/user-attachments/assets/00d41efd-3752-4cec-a6f3-765d69bc9d9a" />
