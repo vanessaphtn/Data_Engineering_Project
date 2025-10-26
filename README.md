@@ -118,4 +118,6 @@ See võiks midagi sellist välja näha:
 <img width="1440" height="876" alt="Screenshot 2025-10-25 at 14 00 39" src="https://github.com/user-attachments/assets/00d41efd-3752-4cec-a6f3-765d69bc9d9a" />
 
 Nüüd võiks midagi sellist välja näha (eeldatavasti):
-<img width="1440" height="876" alt="Screenshot 2025-10-25 at 14 00 39" src="https://github.com/user-attachments/assets/00d41efd-3752-4cec-a6f3-765d69bc9d9a" />
+<p align="center">
+  <img width="1440" height="876" alt="Airflow DAGs" src="docs/screenshots/Bronze.png" />
+</p>
