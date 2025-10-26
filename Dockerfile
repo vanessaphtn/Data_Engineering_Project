@@ -1,7 +1,14 @@
 FROM apache/airflow:2.8.1
 
-# Copy your requirements file into the image
-COPY requirements.txt .
+# Paigaldame git root'ina
+USER root
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends git \
+ && rm -rf /var/lib/apt/lists/*
 
-# Install only the packages you need (from requirements.txt)
-RUN pip install --no-cache-dir -r requirements.txt
+# Tagasi 'airflow' kasutajale enne pip'i
+USER airflow
+
+# Paigaldame Python'i sõltuvused
+COPY requirements.txt /requirements.txt
+RUN pip install --no-cache-dir -r /requirements.txt

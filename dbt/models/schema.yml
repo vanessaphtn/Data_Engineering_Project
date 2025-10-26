@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: silver_trips
+    description: "Puhastatud sõidud Bronze'ist; 1 rida = 1 sõit."
+    columns:
+      - name: ride_id
+        tests: [not_null, unique]
+
+  - name: silver_weather
+    description: "Päevane ilma-agg; 1 rida = 1 kuupäev."
+    columns:
+      - name: date
+        tests: [not_null, unique]
+
+  - name: dim_time
+    description: "Kalendrimõõde; PK = time_id (YYYYMMDD)."
+    columns:
+      - name: time_id
+        tests: [not_null, unique]
+
+  - name: dim_weather
+    description: "Ilmamõõde; PK = weather_id = YYYYMMDD."
+    columns:
+      - name: weather_id
+        tests: [not_null, unique]
+
+  - name: dim_station
+    description: "Jaamade mõõde start/end jaamadest; PK = station_id."
+    columns:
+      - name: station_id
+        tests: [not_null, unique]
+
+  - name: fact_bike_ride
+    description: "Päevane fact (time_id, station_id, user_type, bike_type) koos loenduste ja keskmise kestusega."
+    columns:
+      - name: time_id
+        tests: [not_null]
+      - name: station_id
+        tests: [not_null]

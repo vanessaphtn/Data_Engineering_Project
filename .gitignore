@@ -9,3 +9,11 @@ __pycache__/
 .env
 airflow/dags/data_test
 airflow/dags/test.py
+clickhouse_data/
+pgdata_airflow/
+airflow/logs/
+dbt/target/
+dbt/logs/
+__pycache__/
+*.pyc
+.Rhistory

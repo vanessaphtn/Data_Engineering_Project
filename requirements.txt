@@ -4,3 +4,8 @@ requests
 requests_cache
 openmeteo_requests
 retry_requests
+
+dbt-core==1.7.8
+dbt-clickhouse==1.7.5
+clickhouse-connect==0.6.23
+typing-extensions>=4.6.0
