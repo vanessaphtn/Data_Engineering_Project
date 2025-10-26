@@ -120,3 +120,6 @@ See võiks midagi sellist välja näha:
 Nüüd võiks midagi sellist välja näha (eeldatavasti):
 <img width="1256" height="398" alt="Bronze" src="https://github.com/user-attachments/assets/2e777e8f-06fd-401d-abf7-a39001591361" />
 
+Tegelesin veel ja peaks selline olema:
+<img width="1259" height="433" alt="Screenshot 2025-10-26 201509" src="https://github.com/user-attachments/assets/3912e376-cf73-447a-bcc1-8ef85297c396" />
+
