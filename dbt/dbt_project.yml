@@ -1,0 +1,11 @@
+name: "clickhouse_proj"
+version: "1.0"
+profile: "clickhouse_proj"
+
+models:
+  clickhouse_proj:
+    +materialized: table
+    silver:
+      +schema: silver
+    gold:
+      +schema: gold

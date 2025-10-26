@@ -1,0 +1,13 @@
+clickhouse_proj:
+  target: dev
+  outputs:
+    dev:
+      type: clickhouse
+      host: clickhouse
+      port: 8123
+      user: default
+      password: clickhouse
+      schema: default     # <-- was 'silver'; set to neutral
+      secure: false
+      verify: false
+      threads: 4

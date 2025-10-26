@@ -1,0 +1,24 @@
+# Lightweight dbt runner for ClickHouse
+FROM python:3.11-slim
+
+# system deps needed by dbt + plugins
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git build-essential curl ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+
+# give pip more time; pin protobuf to avoid 1.7.x incompat
+ENV PIP_DEFAULT_TIMEOUT=240
+
+# install in small chunks to reduce timeouts
+RUN python -m pip install --upgrade pip && \
+    pip install --no-cache-dir --timeout 240 \
+      "protobuf<5" "googleapis-common-protos<2" && \
+    pip install --no-cache-dir --timeout 240 \
+      "dbt-core==1.7.8" && \
+    pip install --no-cache-dir --timeout 240 \
+      "dbt-clickhouse==1.7.5"
+
+WORKDIR /usr/app
+ENV DBT_PROFILES_DIR=/usr/app
+
+ENTRYPOINT ["dbt"]
