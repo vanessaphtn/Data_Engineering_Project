@@ -95,7 +95,7 @@ In our project, **Docker** provides a reproducible environment for running inges
 ```
 
 git clone https://github.com/vanessaphtn/Data_Engineering_Project.git
-cd data-engineering-project
+cd data_engineering_project
 docker compose build
 docker compose up -d
 
