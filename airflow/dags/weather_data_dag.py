@@ -78,6 +78,7 @@ def download_weather_data(
     }
 
     df = pd.DataFrame(daily_data)
+    df['date'] = pd.to_datetime(df['date']).dt.strftime('%Y-%m-%d %H:%M:%S')
     print(f"Downloaded {len(df)} rows of daily weather data for {latitude}, {longitude}")
     return df
 

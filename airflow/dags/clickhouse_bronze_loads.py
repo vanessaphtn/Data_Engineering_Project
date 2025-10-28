@@ -4,8 +4,8 @@ from airflow.operators.python import PythonOperator
 from lib_ch import ch_query, ch_insert_csv
 
 SQL_FILE = "/opt/airflow/sql/clickhouse_init.sql"
-WEATHER  = "/opt/airflow/data/bronze/weather/open-meteo-40.74N74.04W51m.csv"
-TRIPS    = "/opt/airflow/data/bronze/citibike/202401-citibike-tripdata_1_8ave_w31st_rides.csv"
+WEATHER  = "/opt/airflow/data/bronze/weather/weather_data.csv"
+TRIPS    = "/opt/airflow/data/bronze/citibike/citibike_202509.csv"
 
 def run_init_sql():
     with open(SQL_FILE, "r", encoding="utf-8") as f:

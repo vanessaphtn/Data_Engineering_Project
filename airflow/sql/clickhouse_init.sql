@@ -1,13 +1,18 @@
 CREATE DATABASE IF NOT EXISTS bronze;
-
-CREATE TABLE IF NOT EXISTS bronze.weather_raw
+DROP TABLE IF EXISTS bronze.weather_raw;
+CREATE TABLE  bronze.weather_raw
 (
-  date                 Date,
-  temperature_max      Float32,
-  temperature_min      Float32,
-  rain_sum             Float32,
-  precipitation_hours  UInt8,
-  _ingested_at         DateTime DEFAULT now()
+    date                    DateTime,
+    weather_code            Float32,
+    temperature_2m_mean     Float32,
+    temperature_2m_max      Float32,
+    temperature_2m_min      Float32,
+    rain_sum                Float32,
+    snowfall_sum            Float32,
+    precipitation_hours     Float32,
+    wind_speed_10m_max      Float32,
+    shortwave_radiation_sum Float32,
+    _ingested_at            DateTime DEFAULT now()
 )
 ENGINE = ReplacingMergeTree(_ingested_at)
 PARTITION BY toYYYYMM(date)
