@@ -21,8 +21,8 @@ WITH base AS (
 daily AS (
   SELECT
     date,
-    any(temperature_max) AS temperature_max,
-    any(temperature_min) AS temperature_min,
+    any(temperature_2m_max) AS temperature_max,
+    any(temperature_2m_min) AS temperature_min,
     any(temperature_2m_mean) AS temperature_mean,
     any(rain_sum)        AS rain_sum,
     any(snowfall_sum)    AS snowfall_sum,

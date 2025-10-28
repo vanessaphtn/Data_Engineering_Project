@@ -1,6 +1,6 @@
 CREATE DATABASE IF NOT EXISTS bronze;
 
-CREATE TABLE IF NOT EXIST bronze.weather_raw
+CREATE TABLE IF NOT EXISTS bronze.weather_raw
 (
     date                    DateTime,
     weather_code            Float32,
