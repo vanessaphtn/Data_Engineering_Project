@@ -13,6 +13,12 @@ models:
       - name: date
         tests: [not_null, unique]
 
+  - name: silver_holidays
+    description: "US and NY holidays for each date; 1 rida = 1 kuupäev."
+    columns:
+      - name: date
+        tests: [not_null, unique]
+
   - name: dim_time
     description: "Kalendrimõõde; PK = time_id (YYYYMMDD)."
     columns:

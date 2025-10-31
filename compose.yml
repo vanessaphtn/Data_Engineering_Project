@@ -61,6 +61,7 @@ services:
       - ./airflow/sql:/opt/airflow/sql
       - ./data/bronze/citibike:/opt/airflow/data/bronze/citibike
       - ./data/bronze/weather:/opt/airflow/data/bronze/weather
+      - ./data/bronze/holiday:/opt/airflow/data/bronze/holiday
       - ./dbt:/opt/airflow/dbt            # <-- dbt projekt Airflowis
     depends_on:
       - airflow-init
@@ -85,6 +86,7 @@ services:
       - ./airflow/sql:/opt/airflow/sql
       - ./data/bronze/citibike:/opt/airflow/data/bronze/citibike
       - ./data/bronze/weather:/opt/airflow/data/bronze/weather
+      - ./data/bronze/holiday:/opt/airflow/data/bronze/holiday
       - ./dbt:/opt/airflow/dbt            # <-- dbt projekt Airflowis
     depends_on:
       - airflow-init

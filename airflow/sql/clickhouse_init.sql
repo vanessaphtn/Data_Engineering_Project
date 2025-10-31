@@ -38,3 +38,14 @@ CREATE TABLE IF NOT EXISTS bronze.trips_raw
 ENGINE = ReplacingMergeTree(_ingested_at)
 PARTITION BY toYYYYMM(started_at)
 ORDER BY (toDate(started_at), start_station_id, ride_id);
+
+CREATE TABLE IF NOT EXISTS bronze.holidays_raw
+(
+    date                  DateTime,
+    is_national_holiday   UInt8,
+    is_new_york_holiday   UInt8,
+    _ingested_at          DateTime DEFAULT now()
+)
+ENGINE = ReplacingMergeTree(_ingested_at)
+PARTITION BY toYYYYMM(date)
+ORDER BY (date);
