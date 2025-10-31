@@ -89,7 +89,7 @@ with DAG(
 # --------------------------------------------------------------------------------
     def download_and_save(**kwargs):
         execution_date = kwargs["ds"]  # e.g. '2025-10-24'
-        last_month_date = datetime.strptime(execution_date, "%Y-%m-%d") - timedelta(days=30)
+        last_month_date = datetime.strptime(execution_date, "%Y-%m-%d") - timedelta(days=31)
         last_month = last_month_date.strftime("%Y%m")  # e.g. '202509'
 
         df_new = download_citibike_month(month_str=last_month) # new data
