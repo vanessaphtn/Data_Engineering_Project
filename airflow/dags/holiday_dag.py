@@ -37,7 +37,7 @@ def download_and_save(**kwargs):
 
 
 with DAG(
-    dag_id="clickhouse_holidays_load",
+    dag_id="holidays_load",
     start_date=days_ago(1),
     schedule=None,       # manual run or trigger before dbt
     catchup=False,
