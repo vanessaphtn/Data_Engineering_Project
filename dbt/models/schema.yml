@@ -8,13 +8,7 @@ models:
         tests: [not_null, unique]
 
   - name: silver_weather
-    description: "Daily weather aggregation; 1 row = 1 date."
-    columns:
-      - name: date
-        tests: [not_null, unique]
-
-  - name: silver_holidays
-    description: "US and NY holidays for each date; 1 rida = 1 kuupäev."
+    description: "Päevane ilma-agg; 1 rida = 1 kuupäev."
     columns:
       - name: date
         tests: [not_null, unique]
