@@ -81,13 +81,18 @@ In our project, **Docker** provides a reproducible environment for running inges
 | Shortwave_radiation_sum| FLOAT        |         | Sum of solar radiation on a given day in Megajoules (MJ/m²)|
 
 ### DIM_TIME
-| Column             | Data type | PK / FK | Description                                               |
-|-------------------|----------|---------|-----------------------------------------------------------|
-| Time_ID           | INT      | PK      | Primary key for the time                                  |
-| Day               | INT      |         | Day of the month (1–31)                                   |
-| Month             | INT      |         | Month of the year (1–12)                                   |
-| Weekday           | INT      |         | Day of the week (1–7). 1 meaning Monday, 7 Sunday        |
-| Is_national_holiday| BOOLEAN  |         | Whether the day is a federal holiday                      |
+| Column              | Data type | PK / FK | Description                                               |
+|--------------------|-----------|---------|-----------------------------------------------------------|
+| Time_ID            | INT       | PK      | Primary key for the time                                  |
+| Day                | INT       |         | Day of the month (1–31)                                   |
+| Month              | INT       |         | Month of the year (1–12)                                   |
+| Weekday            | INT       |         | Day of the week (1–7). 1 meaning Monday, 7 Sunday         |
+| Year               | INT       |         | Year                                                      |
+| Is_national_holiday| BOOLEAN   |         | Whether the day is a federal US holiday                   |
+| Is_new_york_holiday| BOOLEAN   |         | Whether the day is a New York state specific holiday     |
+| Is_weekend         | BOOLEAN   |         | Whether the day is weekend                                |
+| Season             | VARCHAR(15)|        | Winter, Spring, Summer, or Autumn                         |
+
 
 
 ## Project start:
@@ -123,3 +128,5 @@ Nüüd võiks midagi sellist välja näha (eeldatavasti):
 Tegelesin veel ja peaks selline olema:
 <img width="1259" height="433" alt="Screenshot 2025-10-26 201509" src="https://github.com/user-attachments/assets/3912e376-cf73-447a-bcc1-8ef85297c396" />
 
+UUS variant 
+<img width="1420" height="625" alt="Screenshot 2025-10-31 at 18 57 44" src="https://github.com/user-attachments/assets/a5e9ef0c-1a9e-40ca-9b4e-d72284290e40" />
