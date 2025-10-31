@@ -2,13 +2,13 @@ version: 2
 
 models:
   - name: silver_trips
-    description: "Puhastatud sõidud Bronze'ist; 1 rida = 1 sõit."
+    description: "Cleaned rides from Bronze; 1 row = 1 ride."
     columns:
       - name: ride_id
         tests: [not_null, unique]
 
   - name: silver_weather
-    description: "Päevane ilma-agg; 1 rida = 1 kuupäev."
+    description: "Daily weather aggregation; 1 row = 1 date."
     columns:
       - name: date
         tests: [not_null, unique]
@@ -20,27 +20,28 @@ models:
         tests: [not_null, unique]
 
   - name: dim_time
-    description: "Kalendrimõõde; PK = time_id (YYYYMMDD)."
+    description: "Calendar dimension; PK = time_id."
     columns:
       - name: time_id
         tests: [not_null, unique]
 
   - name: dim_weather
-    description: "Ilmamõõde; PK = weather_id = YYYYMMDD."
+    description: "Weather dimension; PK = weather_id."
     columns:
       - name: weather_id
         tests: [not_null, unique]
 
   - name: dim_station
-    description: "Jaamade mõõde start/end jaamadest; PK = station_id."
+    description: "Station dimension; PK = station_id."
     columns:
       - name: station_id
         tests: [not_null, unique]
 
   - name: fact_bike_ride
-    description: "Päevane fact (start_date_id, end_station_id, user_type, bike_type) koos loenduste ja keskmise kestusega."
+    description: "Fact bike ride (start_date_id, end_station_id, user_type, bike_type) with trip duration."
     columns:
       - name: start_date_id
         tests: [not_null]
       - name: end_station_id
         tests: [not_null]
+
