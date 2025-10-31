@@ -32,9 +32,9 @@ models:
         tests: [not_null, unique]
 
   - name: fact_bike_ride
-    description: "Päevane fact (time_id, station_id, user_type, bike_type) koos loenduste ja keskmise kestusega."
+    description: "Päevane fact (start_date_id, end_station_id, user_type, bike_type) koos loenduste ja keskmise kestusega."
     columns:
-      - name: time_id
+      - name: start_date_id
         tests: [not_null]
-      - name: station_id
+      - name: end_station_id
         tests: [not_null]
