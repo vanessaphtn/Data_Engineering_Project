@@ -117,7 +117,18 @@ curl -u default:clickhouse "http://localhost:8123/?query=SELECT%20count()%20FROM
 
 ```
 
-Airflow is http://localhost:8080 (admin/admin)
+Airflow is available at http://localhost:8080 (username: admin, password: admin).
+- Holiday data should be ingested once
+- Weather data is ingested daily
+- Bike ride data is ingested monthly
+- Silver and gold layer transformations are performed monthly, after the bike ride data has been ingested
+
+To manually run the bike ride data ingestion before its scheduled time in the middle of the month, the following DAGs can be triggered in order (for example for testing):
+1. `holidays_load`
+2. `bike_data_ingestion`
+3. `clickhouse_bronze_loads`
+4. `dbt_gold_refresh`
+Weather ingestion DAG will be triggered automatically.
 
 See võiks midagi sellist välja näha:
 <img width="1440" height="876" alt="Screenshot 2025-10-25 at 14 00 39" src="https://github.com/user-attachments/assets/00d41efd-3752-4cec-a6f3-765d69bc9d9a" />
