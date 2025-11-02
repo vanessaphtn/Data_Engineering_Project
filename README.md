@@ -37,7 +37,7 @@ In our project, **Docker** provides a reproducible environment for running inges
 **Quality checks** (done after ingestion): Ensure that every bike trip has both a valid start station and end station, including non-null latitude and longitude values. Trips missing these fields would be excluded. Also, checking if the latitude and longitude values are realistic and falling within the expected geographic range of New York City.
 
 ## 5. Data Model
-<img width="1045" height="auto" alt="dataModel2" src="https://github.com/user-attachments/assets/c21f0ec3-1c67-4563-a265-79abf40c20e4" /> 
+<img width="646" height="368" alt="Screenshot 2025-11-02 at 20 40 23" src="https://github.com/user-attachments/assets/ef222e3c-7731-43d7-9277-270531598d0a" />
 
 **Grain**: Each record represents a single ride event that started and ended on a specific date, linking to corresponding time, weather, and station information.
 
@@ -49,50 +49,66 @@ In our project, **Docker** provides a reproducible environment for running inges
 
 ## 6. Data Dictionary
 ### FACT_BIKE_RIDE
-| Column           | Data type       | PK / FK                   | Description                                      |
-|-----------------|----------------|---------------------------|-------------------------------------------------|
-| Bike_type       | VARCHAR(20)     |                           | Type of bike used for the ride (classic_bike or electric_bike) |
-| Start_date      | INT             | FK (DIM_TIME, Time_ID)    | Ride start time                                  |
-| End_date        | INT             | FK (DIM_TIME, Time_ID)    | Ride end time                                    |
-| Weather         | INT             | FK (DIM_WEATHER, Weather_ID) | Weather on the day of the ride                |
-| Start_timestamp | TIMESTAMP       |                           | Exact timestamp of the ride start time          |
-| End_timestamp   | TIMESTAMP       |                           | Exact timestamp of the ride end time            |
-| End_station_ID  | VARCHAR(10)     | FK (DIM_STATIONS, Station_ID) | Station where the ride ended                 |
-| User_type       | VARCHAR(10)     |                           | Type of the user (member or casual)            |
+| Column          | Data type | PK / FK                          | Description                            |
+| --------------- | --------- | -------------------------------- | -------------------------------------- |
+| Bike_type_ID    | INT       | FK (DIM_BIKE_TYPE, Bike_type_ID) | Type of bike used for the ride         |
+| Start_date_ID   | INT       | FK (DIM_TIME, Time_ID)           | Ride start date                        |
+| Weather_ID      | INT       | FK (DIM_WEATHER, Weather_ID)     | Weather on the day of the ride         |
+| Start_timestamp | TIMESTAMP |                                  | Exact timestamp of the ride start time |
+| End_timestamp   | TIMESTAMP |                                  | Exact timestamp of the ride end time   |
+| End_station_ID  | INT       | FK (DIM_STATIONS, Station_ID)    | Station where the ride ended           |
+| User_type_ID    | INT       | FK (DIM_USER_TYPE, User_type_ID) | Type of the user                       |
+| Trip_duration   | INT       |                                  | Trip duration in minutes               |
+
+### DIM_USER_TYPE
+| Column       | Data type   | PK / FK | Description                         |
+| ------------ | ----------- | ------- | ----------------------------------- |
+| User_type_ID | INT         | PK      | Primary key for user type           |
+| User_type    | VARCHAR(10) |         | Type of the user (member or casual) |
+
+### DIM_BIKE_TYPE
+| Column       | Data type   | PK / FK | Description                                          |
+| ------------ | ----------- | ------- | ---------------------------------------------------- |
+| Bike_type_ID | INT         | PK      | Primary key for bike type                            |
+| Bike_type    | VARCHAR(20) |         | Type of bike used for the ride (classic or electric) |
+
 
 ### DIM_STATIONS
-| Column        | Data type            | PK / FK | Description                                    |
-|---------------|--------------------|---------|-----------------------------------------------|
-| Station_ID    | VARCHAR(10)         | PK      | ID of the station, e.g. ‘HB202’              |
-| Station_name  | VARCHAR             |         | Name of the station, e.g. ‘Clinton St & Newark St’ |
-| Latitude      | DECIMAL(8,6)        |         | Latitude of the station position              |
-| Longitude     | DECIMAL(9,6)        |         | Longitude of the station position             |
+| Column               | Data type    | PK / FK | Description                                              |
+| -------------------- | ------------ | ------- | -------------------------------------------------------- |
+| Station_ID           | INT          | PK      | Primary key for station                                  |
+| Station_business_key | VARCHAR(10)  |         | ID of the station, e.g. ‘HB202’                          |
+| Station_name         | VARCHAR      |         | Name of the station, e.g. ‘Clinton St & Newark St’       |
+| Latitude             | DECIMAL(8,6) |         | Latitude of the station position                         |
+| Longitude            | DECIMAL(9,6) |         | Longitude of the station position                        |
+| Valid_From           | DATE         |         | Date when this version of the record became valid        |
+| Valid_To             | DATE         |         | Date when this version of the record stopped being valid |
 
 ### DIM_WEATHER
-| Column                 | Data type     | PK / FK | Description                                                |
-|------------------------|--------------|---------|------------------------------------------------------------|
-| Weather_ID             | INT          | PK      | Primary key for weather                                     |
-| Temperature_max        | DECIMAL(4,2) |         | Maximum daily air temperature at 2 meters above ground (°C)|
-| Temperature_min        | DECIMAL(4,2) |         | Minimum daily air temperature at 2 meters above ground (°C)|
-| Rain_sum               | FLOAT        |         | Sum of daily rain (mm)                                     |
-| Precipitation_hours    | INT          |         | The number of hours with rain                               |
-| Snowfall_sum           | FLOAT        |         | Sum of daily snowfall (cm)                                  |
-| Wind_speed_max         | FLOAT        |         | Maximum wind speed (km/h)                                   |
-| Shortwave_radiation_sum| FLOAT        |         | Sum of solar radiation on a given day in Megajoules (MJ/m²)|
+| Column                  | Data type    | PK / FK | Description                                                 |
+| ----------------------- | ------------ | ------- | ----------------------------------------------------------- |
+| Weather_ID              | INT          | PK      | Primary key for weather                                     |
+| Temperature_max         | DECIMAL(4,2) |         | Maximum daily air temperature at 2 meters above ground (°C) |
+| Temperature_min         | DECIMAL(4,2) |         | Minimum daily air temperature at 2 meters above ground (°C) |
+| Temperature_mean        | DECIMAL(4,2) |         | Mean daily air temperature at 2 meters above ground (°C)    |
+| Rain_sum                | FLOAT        |         | Sum of daily rain (mm)                                      |
+| Precipitation_hours     | INT          |         | Number of hours with rain                                   |
+| Snowfall_sum            | FLOAT        |         | Sum of daily snowfall (cm)                                  |
+| Wind_speed_max          | FLOAT        |         | Maximum wind speed (km/h)                                   |
+| Shortwave_radiation_sum | FLOAT        |         | Sum of solar radiation on a given day in Megajoules (MJ/m²) |
 
 ### DIM_TIME
-| Column              | Data type | PK / FK | Description                                               |
-|--------------------|-----------|---------|-----------------------------------------------------------|
-| Time_ID            | INT       | PK      | Primary key for the time                                  |
-| Day                | INT       |         | Day of the month (1–31)                                   |
-| Month              | INT       |         | Month of the year (1–12)                                   |
-| Weekday            | INT       |         | Day of the week (1–7). 1 meaning Monday, 7 Sunday         |
-| Year               | INT       |         | Year                                                      |
-| Is_national_holiday| BOOLEAN   |         | Whether the day is a federal US holiday                   |
-| Is_new_york_holiday| BOOLEAN   |         | Whether the day is a New York state specific holiday     |
-| Is_weekend         | BOOLEAN   |         | Whether the day is weekend                                |
-| Season             | VARCHAR(15)|        | Winter, Spring, Summer, or Autumn                         |
-
+| Column              | Data type   | PK / FK | Description                                          |
+| ------------------- | ----------- | ------- | ---------------------------------------------------- |
+| Time_ID             | INT         | PK      | Primary key for the time                             |
+| Day                 | INT         |         | Day of the month (1–31)                              |
+| Month               | INT         |         | Month of the year (1–12)                             |
+| Weekday             | INT         |         | Day of the week (1–7). 1 = Monday, 7 = Sunday        |
+| Year                | INT         |         | Year                                                 |
+| Is_national_holiday | BOOLEAN     |         | Whether the day is a federal US holiday              |
+| Is_new_york_holiday | BOOLEAN     |         | Whether the day is a New York state-specific holiday |
+| Is_weekend          | BOOLEAN     |         | Whether the day is a weekend                         |
+| Season              | VARCHAR(15) |         | Winter, Spring, Autumn or Summer                     |
 
 
 ## Project start:
