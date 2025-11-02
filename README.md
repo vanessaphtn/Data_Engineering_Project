@@ -125,11 +125,15 @@ docker compose run --rm dbt debug
 docker compose run --rm dbt run
 docker compose run --rm dbt test
 
-Query:
+Short queries to test whether the data is successfully loaded:
 curl -u default:clickhouse "http://localhost:8123/?query=SHOW%20TABLES%20FROM%20default_silver"
 curl -u default:clickhouse "http://localhost:8123/?query=SHOW%20TABLES%20FROM%20default_gold"
 curl -u default:clickhouse "http://localhost:8123/?query=SELECT%20count()%20FROM%20default_gold.fact_bike_ride"
 
+Analytical queries can be run manually like this:
+1. docker exec -it clickhouse clickhouse-client
+2. USE default_gold;
+3. SELECT * FROM fact_bike_ride LIMIT 10; (example queries are in queries/analytical_queries.sql)
 
 ```
 
@@ -148,3 +152,29 @@ Weather ingestion DAG will be triggered automatically.
 
 Should look something like this:
 <img width="1440" height="876" alt="airflow" src="docs/screenshots/airflow.png" />
+
+
+## Outputs of example analytical queries:
+1. How do daily temperatures influence the number of rides taken from the station? (daily ride count)
+   
+   <img width="342" height="497.5" alt="airflow" src="docs/screenshots/guery1.png" />
+2. How do precipitation and snowfall affect daily ride counts? (daily ride count)
+   
+   <img width="567" height="415" alt="airflow" src="docs/screenshots/query2.png" />
+3. Do members or casual riders contribute more to overall ride volume under different weather conditions? (daily ride count)
+   
+   <img width="500" height="390" alt="airflow" src="docs/screenshots/query3.png" />
+4. Do members or casual riders take longer trips in terms of duration? (trip duration, rider composition)
+   
+   <img width="500" height="120" alt="airflow" src="docs/screenshots/query4.png" />
+5. Do members or casual riders travel farther in terms of distance? (trip distance, rider composition)
+    
+   <img width="500" height="120" alt="airflow" src="docs/screenshots/query5.png" />
+   
+
+   
+
+
+   
+
+
