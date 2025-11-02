@@ -1,5 +1,5 @@
 from airflow import DAG
-from airflow.utils.dates import days_ago
+from datetime import datetime
 from airflow.operators.python import PythonOperator
 from lib_ch import ch_query, ch_insert_csv
 
@@ -18,9 +18,9 @@ def run_init_sql():
 
 with DAG(
     dag_id="clickhouse_bronze_loads",
-    start_date=days_ago(1),
-    schedule=None,
-    catchup=False,
+    start_date=datetime(2025, 10, 20),
+    schedule="0 5 16 * *",  # After the ingestion of bike data
+    catchup=True,
 ) as dag:
     init = PythonOperator(
         task_id="init_clickhouse",

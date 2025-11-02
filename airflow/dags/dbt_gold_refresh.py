@@ -2,6 +2,7 @@
 from datetime import datetime
 from airflow import DAG
 from airflow.operators.bash import BashOperator
+from defaults import DEFAULT_ARGS
 
 # Paths inside the Airflow containers
 DBT_DIR = "/opt/airflow/dbt"
@@ -14,18 +15,14 @@ DBT_ENV = {
     "DBT_TARGET_PATH": "/tmp/dbt_target", # write manifest/run artifacts to /tmp
 }
 
-default_args = {
-    "owner": "airflow",
-    "retries": 0,
-}
 
 with DAG(
     dag_id="dbt_gold_refresh",
     description="Run dbt silver and gold models (ClickHouse) and tests",
-    start_date=datetime(2024, 1, 1),
-    schedule="@daily",
+    start_date=datetime(2025, 10, 20),
+    schedule="0 6 16 * *", # After the bronze loads
     catchup=False,
-    default_args=default_args,
+    default_args=DEFAULT_ARGS,
     tags=["dbt", "clickhouse", "gold"],
 ) as dag:
 

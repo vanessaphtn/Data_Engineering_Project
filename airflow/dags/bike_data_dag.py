@@ -8,6 +8,7 @@ import requests
 import os, io
 import zipfile
 from retry_requests import retry
+from defaults import DEFAULT_ARGS
 
 # --------------------------------------------------------------------------------
 # Helper functions
@@ -59,24 +60,13 @@ def download_citibike_month(month_str, station_name="8 Ave & W 31 St", output_di
     print(f"Downloaded {len(df_all)} rows")
     return df_all
 
-# --------------------------------------------------------------------------------
-# DAG arguments
-# --------------------------------------------------------------------------------
-default_args = {
-    "owner": "airflow",
-    "depends_on_past": False,
-    "email_on_failure": False,
-    "email_on_retry": False,
-    "retries": 1,
-    "retry_delay": timedelta(minutes=2),
-}
 
 # --------------------------------------------------------------------------------
 # DAG definition
 # --------------------------------------------------------------------------------
 with DAG(
     dag_id="bike_data_ingestion",
-    default_args=default_args,
+    default_args=DEFAULT_ARGS,
     description="Download monthly bike data and save to CSV",
     start_date=datetime(2025, 10, 20),
     schedule_interval="0 4 15 * *",  # change as needed
@@ -108,20 +98,4 @@ with DAG(
         python_callable=download_and_save,
         provide_context=True
     )
-
-#     # --------------------------------------------------------------------------------
-#     #  Load into ClickHouse -- POLE TEHTUD
-#     # --------------------------------------------------------------------------------
-#     def load_to_clickhouse(**kwargs):
-#         return None
-
-#     load_task = PythonOperator(
-#         task_id="load_bike_to_clickhouse",
-#         python_callable=load_to_clickhouse
-#     )
-
-#     # --------------------------------------------------------------------------------
-#     # Task dependencies
-#     # --------------------------------------------------------------------------------
-#     download_task >> load_task
 

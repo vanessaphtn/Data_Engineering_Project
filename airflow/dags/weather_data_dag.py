@@ -10,6 +10,7 @@ import zipfile
 import openmeteo_requests
 import requests_cache
 from retry_requests import retry
+from defaults import DEFAULT_ARGS
 
 # --------------------------------------------------------------------------------
 # Downloads the weather data via API
@@ -83,23 +84,11 @@ def download_weather_data(
     return df
 
 # --------------------------------------------------------------------------------
-# DAG arguments
-# --------------------------------------------------------------------------------
-default_args = {
-    "owner": "airflow",
-    "depends_on_past": False,
-    "email_on_failure": False,
-    "email_on_retry": False,
-    "retries": 1,
-    "retry_delay": timedelta(minutes=2),
-}
-
-# --------------------------------------------------------------------------------
 # DAG definition
 # --------------------------------------------------------------------------------
 with DAG(
     dag_id="weather_data_ingestion",
-    default_args=default_args,
+    default_args=DEFAULT_ARGS,
     description="Download daily weather data and save to CSV",
     start_date=datetime(2025, 10, 24),
     schedule_interval="@daily",  # change as needed
@@ -124,44 +113,4 @@ with DAG(
         python_callable=download_and_save,
         provide_context=True
     )
-
-    # --------------------------------------------------------------------------------
-    #  Load into ClickHouse -- POLE TEHTUD, hetkel mingi chatGPT värk 
-    # --------------------------------------------------------------------------------
-    # def load_to_clickhouse(**kwargs):
-    #     file_path = "data/bronze/weather_data.csv"
-    #     df = pd.read_csv(file_path)
-
-    #     # ClickHouse connection (example using BaseHook for Airflow connection)
-    #     client = Client(host="clickhouse", port=9000, user="default", password="clickhouse", database="weather_db")
-    #     client.execute("CREATE TABLE IF NOT EXISTS bronze_weather (\
-    #         date DateTime, \
-    #         weather_code Float32, \
-    #         temperature_2m_mean Float32, \
-    #         temperature_2m_max Float32, \
-    #         temperature_2m_min Float32, \
-    #         rain_sum Float32, \
-    #         snowfall_sum Float32, \
-    #         precipitation_hours Float32, \
-    #         wind_speed_10m_max Float32, \
-    #         shortwave_radiation_sum Float32)\
-    #         ENGINE = MergeTree() ORDER BY date;")
-
-    #     # Insert data
-    #     records = df.to_dict("records")
-    #     client.execute(
-    #         "INSERT INTO bronze_weather VALUES",
-    #         [tuple(r.values()) for r in records]
-    #     )
-    #     print(f"Loaded {len(df)} rows into ClickHouse.")
-
-    # load_task = PythonOperator(
-    #     task_id="load_weather_to_clickhouse",
-    #     python_callable=load_to_clickhouse
-    # )
-
-    # # --------------------------------------------------------------------------------
-    # # Task dependencies
-    # # --------------------------------------------------------------------------------
-    # download_task >> load_task
 

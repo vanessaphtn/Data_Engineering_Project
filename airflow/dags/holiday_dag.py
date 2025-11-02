@@ -1,5 +1,6 @@
 import pandas as pd
 import holidays
+from datetime import datetime
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.utils.dates import days_ago
@@ -38,7 +39,7 @@ def download_and_save(**kwargs):
 
 with DAG(
     dag_id="holidays_load",
-    start_date=days_ago(1),
+    start_date=datetime(2024, 1, 1),
     schedule=None,       # manual run or trigger before dbt
     catchup=False,
     tags=["bronze", "holidays"],

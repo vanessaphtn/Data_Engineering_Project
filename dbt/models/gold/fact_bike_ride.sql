@@ -1,4 +1,4 @@
-{{ config(materialized='incremental', on_schema_change='append_new_columns') }}
+{{ config(materialized='incremental', unique_key='ride_id', on_schema_change='append_new_columns') }}
 
 WITH base AS (
     SELECT
