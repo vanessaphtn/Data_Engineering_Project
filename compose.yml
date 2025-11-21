@@ -23,6 +23,7 @@ services:
     image: clickhouse/clickhouse-server:24.3
     environment:
       CLICKHOUSE_DB: bronze
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
       CLICKHOUSE_USER: default
       CLICKHOUSE_PASSWORD: clickhouse
     ports:

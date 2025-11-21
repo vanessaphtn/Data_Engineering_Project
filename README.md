@@ -130,11 +130,16 @@ curl -u default:clickhouse "http://localhost:8123/?query=SHOW%20TABLES%20FROM%20
 curl -u default:clickhouse "http://localhost:8123/?query=SHOW%20TABLES%20FROM%20default_gold"
 curl -u default:clickhouse "http://localhost:8123/?query=SELECT%20count()%20FROM%20default_gold.fact_bike_ride"
 
-Analytical queries can be run manually like this:
+Analytical queries can be run manually like this (Project 2):
 1. docker exec -it clickhouse clickhouse-client
 2. USE default_gold;
 3. SELECT * FROM fact_bike_ride LIMIT 10; (example queries are in queries/analytical_queries.sql)
 
+To create roles and users (Project 3):
+docker exec -i clickhouse clickhouse-client -u default --password clickhouse --multiquery < queries/roles.sql
+docker exec -it clickhouse clickhouse-client -u default --password clickhouse
+SHOW USERS;
+SHOW ROLES;
 ```
 
 Airflow is available at http://localhost:8080 (username: admin, password: admin).

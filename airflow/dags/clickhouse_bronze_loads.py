@@ -5,7 +5,7 @@ from lib_ch import ch_query, ch_insert_csv
 
 SQL_FILE = "/opt/airflow/sql/clickhouse_init.sql"
 WEATHER  = "/opt/airflow/data/bronze/weather/weather_data.csv"
-TRIPS    = "/opt/airflow/data/bronze/citibike/citibike_202509.csv"
+TRIPS    = "/opt/airflow/data/bronze/citibike/citibike_202510.csv"
 HOLIDAYS = "/opt/airflow/data/bronze/holiday/holidays.csv"
 
 def run_init_sql():
