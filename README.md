@@ -1,5 +1,10 @@
 # Examining the Influence of Weather on CitiBike Trips in New York City
 
+- [Project 1](#project-1)
+- [Project 2](#project-2)
+- [Project 3](#project-3)
+
+# PROJECT 1:
 ## 1. Business Brief
 ### Objective
 The project investigates how daily weather conditions influence the use of a selected Citi Bike station in New York City over the course of 2024. Each new month of data is incorporated sequentially, allowing for a continuous view of usage patterns across the year. The station was chosen from a popular area to capture steady demand and provide meaningful comparisons between members and casual riders. The observed station is 5 Ave & W 31 St and it is located in a busy area near Penn Station, Madison Square Garden, and several office buildings. Although the analysis focuses on New York City, the same framework can be applied to other cities or countries, such as Tartu, to explore how weather conditions impact shared bike usage in different urban areas.
@@ -110,8 +115,8 @@ In our project, **Docker** provides a reproducible environment for running inges
 | Is_weekend          | BOOLEAN     |         | Whether the day is a weekend                         |
 | Season              | VARCHAR(15) |         | Winter, Spring, Autumn or Summer                     |
 
-
-## Project start:
+# PROJECT 2:
+## Project SETUP:
 
 ```
 
@@ -135,11 +140,6 @@ Analytical queries can be run manually like this (Project 2):
 2. USE default_gold;
 3. SELECT * FROM fact_bike_ride LIMIT 10; (example queries are in queries/analytical_queries.sql)
 
-To create roles and users (Project 3):
-docker exec -i clickhouse clickhouse-client -u default --password clickhouse --multiquery < queries/roles.sql
-docker exec -it clickhouse clickhouse-client -u default --password clickhouse
-SHOW USERS;
-SHOW ROLES;
 ```
 
 Airflow is available at http://localhost:8080 (username: admin, password: admin).
@@ -176,7 +176,9 @@ Should look something like this:
     
    <img width="500" height="120" alt="airflow" src="docs/screenshots/query5.png" />
    
+# PROJECT 3:
 
+MORE ABOUT CLICKHOUSE ROLES, GRANTS, MASKING LOGIC: [see queries README](queries/README.md)
    
 
 
