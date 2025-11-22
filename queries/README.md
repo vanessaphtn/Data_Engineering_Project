@@ -28,19 +28,19 @@ docker exec -it clickhouse clickhouse-client -u user_full  --password full
 -- 1. full info about the bike ride
 SELECT * FROM default_gold.v_bike_ride_full LIMIT 5
 ```
-<img width="auto" height="auto" alt="full" src="docs/screenshots/full_1.png" />
+<img width="auto" height="auto" alt="full" src="../docs/screenshots/full_1.png" />
 
 ```
 -- 2. Are there consistent differences in usage between weekdays and weekends?
 SELECT * FROM default_gold.v_usage_daily_full
 ```
-<img width="auto" height="auto" alt="full" src="docs/screenshots/full_2.png" />
+<img width="auto" height="auto" alt="full" src="../docs/screenshots/full_2.png" />
 
 ```
 -- 3. Do members or casual riders travel farther in terms of distance?
 SELECT user_type_name, AVG(trip_minutes) FROM default_gold.v_bike_ride_full GROUP BY user_type_name
 ```
-<img width="auto" height="auto" alt="full" src="docs/screenshots/full_3.png" />
+<img width="auto" height="auto" alt="full" src="../docs/screenshots/full_3.png" />
 
 #### Limited access user:
 ```
@@ -50,16 +50,17 @@ docker exec -it clickhouse clickhouse-client -u user_limited  --password limited
 -- 1. full info about the bike ride (limited version)
 SELECT * FROM default_gold.v_bike_ride_limited LIMIT 5
 ```
-<img width="auto" height="auto" alt="limited" src="docs/screenshots/limited_1.png" />
+<img width="auto" height="auto" alt="limited" src="../docs/screenshots/limited_1.png" />
 
 ```
 -- 2. Are there consistent differences in usage between weekdays and weekends?
 SELECT * FROM default_gold.v_usage_daily_limited
 ```
-<img width="auto" height="auto" alt="limited" src="docs/screenshots/limited_2.png" />
+<img width="auto" height="auto" alt="limited" src="../docs/screenshots/limited_2.png"/>
 
 ```
 -- 3. Do members or casual riders travel farther in terms of distance?
 SELECT user_type_name, AVG(trip_minutes) FROM default_gold.v_bike_ride_limited GROUP BY user_type_name
 ```
-<img width="auto" height="auto" alt="limited" src="docs/screenshots/limited_3.png" />
+<img width="auto" height="auto" alt="limited" src="../docs/screenshots/limited_3.png"/>
+
