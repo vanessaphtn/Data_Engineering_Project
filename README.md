@@ -179,6 +179,8 @@ Should look something like this:
 # PROJECT 3:
 
 MORE ABOUT CLICKHOUSE ROLES, GRANTS, MASKING LOGIC: [see queries README](queries/README.md)
+
+OPENMETADATA SETUP AND SCREENSHOTS: [see OpenMetadata README](Openmetadata_README.md)
    
 
 
