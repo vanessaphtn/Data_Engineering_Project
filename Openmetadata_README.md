@@ -1,6 +1,6 @@
-## Openmetadata
+# OpenMetadata
 
-### The connection between ClickHouse and OpenMetadata can be established using these steps ->
+## Steps to establish the connection between ClickHouse and OpenMetadata
 
 1. Open Airflow (http://localhost:8080) and log in using:
    * Username: admin
@@ -47,4 +47,16 @@ GRANT role_openmetadata TO service_openmetadata;
      * Click **Test Connection**  
      * If successful, click **Next** and **Save** the service.  
 
-### Screenshots
+## Screenshots
+
+Gold layer tables with descriptions
+
+<img width="500" height="400" alt="airflow" src="docs/screenshots/openmetadata_tables.png" />
+
+Column descriptions of one of the dimension tables
+
+<img width="500" height="400" alt="airflow" src="docs/screenshots/openmetadata_column_names.png" />
+
+Results of the data quality checks
+
+<img width="500" height="400" alt="airflow" src="docs/screenshots/openmetadata_tests.png" />
