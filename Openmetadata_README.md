@@ -16,7 +16,7 @@
 4. Execute  ```docker exec -it clickhouse clickhouse-client``` and run the following queries:
 ```
 CREATE ROLE role_openmetadata;
-CREATE USER service_openmetadata IDENTIFIED WITH sha256_password BY 'omd_very_secret_password;
+CREATE USER service_openmetadata IDENTIFIED WITH sha256_password BY 'omd_very_secret_password';
    
 GRANT SELECT, SHOW ON system.* to role_openmetadata;
 GRANT SELECT, SHOW ON default_gold.* to role_openmetadata;
@@ -37,7 +37,7 @@ GRANT role_openmetadata TO service_openmetadata;
      e.g. `clickhouse_warehouse`, can be whatever you would like
      * **Host and Port:**  
      Use the Docker service name and HTTP port, for example:  
-     `clickhouse-server-omd:8123`
+     `clickhouse:8123`
      * **Username:** `service_openmetadata`
      * **Password:** `omd_very_secret_password`
      * **Database / Schema:**  
@@ -51,12 +51,18 @@ GRANT role_openmetadata TO service_openmetadata;
 
 Gold layer tables with descriptions
 
-<img width="500" height="400" alt="airflow" src="docs/screenshots/openmetadata_tables.png" />
+<img width="700" height="500" alt="airflow" src="docs/screenshots/openmetadata_tables.png" />
 
 Column descriptions of one of the dimension tables
 
-<img width="500" height="400" alt="airflow" src="docs/screenshots/openmetadata_column_names.png" />
+<img width="700" height="500" alt="airflow" src="docs/screenshots/openmetadata_column_names.png" />
 
 Results of the data quality checks
 
-<img width="500" height="400" alt="airflow" src="docs/screenshots/openmetadata_tests.png" />
+<img width="700" height="500" alt="airflow" src="docs/screenshots/openmetadata_tests.png" />
+
+(Added more tests)
+
+<img width="700" height="500" alt="airflow" src="docs/screenshots/openmetadata_tests2.png" />
+
+<img width="700" height="500" alt="airflow" src="docs/screenshots/openmetadata_tests3.png" />
