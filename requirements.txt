@@ -10,3 +10,9 @@ dbt-core==1.7.8
 dbt-clickhouse==1.7.5
 clickhouse-connect==0.6.23
 typing-extensions>=4.6.0
+
+# --- Iceberg + IO (compatible with Airflow 2.8 + Py3.8) ---
+pyiceberg==0.5.1
+fsspec==2023.12.2
+s3fs==2023.12.2
+pyarrow==14.0.2

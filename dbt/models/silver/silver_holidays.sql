@@ -2,9 +2,9 @@
 
 WITH base AS (
     SELECT
-        date,
-        is_national_holiday,
-        is_new_york_holiday
+        toDate(date) AS date,
+        CAST(is_national_holiday, 'UInt8') AS is_national_holiday,
+        CAST(is_new_york_holiday, 'UInt8') AS is_new_york_holiday
     FROM bronze.holidays_raw
 ),
 
@@ -29,6 +29,4 @@ SELECT
         toMonth(date) IN (9, 10, 11), 'autumn',
         'unknown'
     ) AS season
-
 FROM deduped
-
