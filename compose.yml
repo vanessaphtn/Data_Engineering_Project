@@ -41,6 +41,36 @@ services:
       retries: 5
     restart: always
 
+  # --- Superset ---
+  superset:
+    build:
+      context: ./superset
+      dockerfile: Dockerfile
+    container_name: superset
+    depends_on:
+      - clickhouse
+    ports:
+      - "8088:8088"
+    environment:
+      SUPERSET_ENV: production
+      SUPERSET_SECRET_KEY: "supersecretkey123"
+      SUPERSET_LOAD_EXAMPLES: "no"
+      ADMIN_USERNAME: "admin"
+      ADMIN_PASSWORD: "admin"
+      ADMIN_FIRST_NAME: "Admin"
+      ADMIN_LAST_NAME: "User"
+      ADMIN_EMAIL: "admin@superset.com"
+    volumes:
+      - superset_home:/app/superset_home
+    command: >
+      /bin/bash -c "
+      superset db upgrade &&
+      superset fab create-admin --username admin --password admin --firstname Admin --lastname User --email admin@example.com || true &&
+      superset init &&
+      gunicorn --workers 3 --timeout 300 --bind 0.0.0.0:8088 'superset.app:create_app()'
+      "
+    restart: always
+
   # --- Airflow Webserver ---
   airflow-webserver:
     build: .
@@ -571,6 +601,7 @@ services:
 volumes:
   pgdata_airflow:
   clickhouse_data:
+  superset_home:
   ingestion-volume-dag-airflow:
   ingestion-volume-dags:
   ingestion-volume-tmp:
